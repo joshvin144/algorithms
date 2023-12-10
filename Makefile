@@ -10,14 +10,17 @@ OUTPUT_DIR:=$(CURRENT_DIR)/bin
 # Source Files
 C_SOURCE+=$(CURRENT_DIR)/utilities/utilities.c
 C_SOURCE+=$(CURRENT_DIR)/utilities/utilities_user.c
+C_SOURCE+=$(CURRENT_DIR)/adc/adc.c
 
 # Header Files
 C_INCLUDE+=-iquote $(CURRENT_DIR)/utilities/utilities.h
 C_INCLUDE+=-iquote $(CURRENT_DIR)/utilities/utilities_user.h
+C_INCLUDE+=-iquote $(CURRENT_DIR)/adc/adc.h
+C_INCLUDE+=-iquote $(CURRENT_DIR)/adc/adc_user.h
 
 # Unit Tests
-TEST_SOURCE+=$(CURRENT_DIR)/unit_testing/test_safe_memcpy.c
-TEST_EXECUTABLE+=$(OUTPUT_DIR)/test_safe_memcpy.exe
+TEST_SOURCE+=$(CURRENT_DIR)/unit_testing/test_adc.c
+TEST_EXECUTABLE+=$(OUTPUT_DIR)/test_adc.exe
 
 # GCC arguments
 CFLAGS+=-std=gnu99

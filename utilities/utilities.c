@@ -48,3 +48,10 @@ bool safe_memcpy(uint32_t* arr_to, uint32_t num_elements_in_arr_to, uint32_t* ar
 	}
 	return successful_memcpy;
 }
+
+
+float round_to_three_decimal_places( float value )
+{
+	return ( round( value * 1000.0f ) / ( 1000.0f ) );
+}
+

@@ -1,0 +1,7 @@
+
+
+# Ignore generated object files
+*.o
+
+# Ignore generated executable files
+*.exe

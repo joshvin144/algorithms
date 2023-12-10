@@ -36,3 +36,6 @@ uint32_t get_min(uint32_t* p_arr, uint32_t array_length);
  * @return : Whether the memcpy was a success or not
  */
 bool safe_memcpy(uint32_t* arr_to, uint32_t num_elements_in_arr_to, uint32_t* arr_from, uint32_t num_elements_in_arr_from, uint32_t num_elements_to_copy);
+
+
+float round_to_three_decimal_places( float value );
