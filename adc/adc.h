@@ -5,13 +5,14 @@
 #include <assert.h>
 
 
+// Sourced from "Figure 34. ADC accuracy characteristics" in the STM32L412KBU documentation
 #define VDDA ( 3.6f )
 #define VREF ( VDDA )
 #define ADC_RESOLUTION ( 12u )
 #define OUTPUT_CODE_RANGE ( ( uint32_t ) ( exp2( ADC_RESOLUTION ) ) ) 
 #define SINGLE_LSB ( VREF/ ( float ) OUTPUT_CODE_RANGE )
 
-
+// Structure to store the ADC characteristics necessary to convert the output code to voltage
 typedef struct{
 	float reference_voltage;
 	uint32_t output_code_range;
