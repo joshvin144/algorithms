@@ -4,16 +4,23 @@
 #include <assert.h>
 
 
+// Number of sample values to calculate
 #define NUM_SAMPLES 17
 
 
+// Manually determined from "Figure 34. ADC accuracy characteristics" in the STM32L412KBU documentation
 uint32_t predefined_output_code[NUM_SAMPLES] = {0, 256, 512, 768, 1024, 1280, 1536, 1792, 2048,
 	                                            2304, 2560, 2816, 3072, 3328, 3584, 3840, 4096};
 float expected_output_voltage[NUM_SAMPLES] = {0.0, 0.225, 0.45, 0.675, 0.9, 1.125, 1.35, 1.575,
 	                                          1.8, 2.025, 2.25, 2.475, 2.7, 2.925, 3.15, 3.375, 3.6};
+// Array in which to store the calculated voltages
 float calculated_output_voltage[NUM_SAMPLES] = {0};
 
 
+/*
+ * @description : Tests the ability to calulate voltage values in the ADC's linear range
+ * @parameters : None
+ */
 bool test_adc_within_range( void )
 {
 	adc_init_adc_module();
