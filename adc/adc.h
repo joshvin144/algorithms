@@ -12,6 +12,7 @@
 #define OUTPUT_CODE_RANGE ( ( uint32_t ) ( exp2( ADC_RESOLUTION ) ) ) 
 #define SINGLE_LSB ( VREF/ ( float ) OUTPUT_CODE_RANGE )
 
+
 // Structure to store the ADC characteristics necessary to convert the output code to voltage
 typedef struct{
 	float reference_voltage;
