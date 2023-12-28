@@ -9,16 +9,24 @@
 
 
 // Manually calculated
-static float sample_output[NUM_SAMPLES] = {0.0, 0.343, 0.653, 0.9, 1.2, 1.4, 1.6, 1.8, 2.0, 2.1,
-	                                2.3, 2.4, 2.5, 2.6, 2.7, 2.8, 2.9, 2.9, 3.0, 3.1, 3.1};
-static float expected_derivative[NUM_SAMPLES - 1u] = {0.343, 0.310, 0.280, 0.254, 0.230, 0.208, 0.188, 0.170, 0.154, 0.139,
-                                              0.126, 0.114, 0.103, 0.093, 0.084, 0.076, 0.069, 0.063, 0.057, 0.051};
-static float expected_riemman_sum[NUM_SAMPLES - 1u] = {0.0, 0.343, 0.995, 1.928, 3.115, 4.532, 6.156, 7.968, 9.951, 12.087,
-                                               14.363, 16.764, 19.280, 21.899, 24.611, 27.408, 30.281, 33.223, 36.228, 39.290};
-static float expected_trapezoid_sum[NUM_SAMPLES - 1u] = {0.171, 0.669, 1.462, 2.522, 3.823, 5.344, 7.062, 8.959, 11.0187, 13.225, 15.563,
-                                                 18.022, 20.589, 23.255, 26.010, 28.844, 31.752, 34.726, 37.759, 40.846};
-static float calculated_derivative[NUM_SAMPLES - 1u] = {0};
-
+float sample_output[NUM_SAMPLES] = {0.0,
+0.652569288919265, 1.1868478342717, 1.6242781100615, 1.982415729178, 2.27563401178281,
+2.51570083711607, 2.71225092981022, 2.87317253521924, 3.00492400240229, 3.11279298034819,
+3.2011086298956, 3.27341536815811, 3.3326151184284, 3.38108377454922, 3.42076655387569,
+3.45325606567788, 3.47985622814283, 3.50163459918975, 3.5194652213178, 3.53406370000056};
+float expected_derivative[NUM_SAMPLES - 1u] = {0.652569288919265, 0.534278545352435, 0.4374302757898, 0.3581376191165, 0.29321828260481,
+0.24006682533326, 0.19655009269415, 0.16092160540902, 0.13175146718305, 0.1078689779459,
+0.08831564954741, 0.07230673826251, 0.05919975027029, 0.04846865612082, 0.03968277932647,
+0.03248951180219, 0.02660016246495, 0.02177837104692, 0.01783062212805, 0.01459847868276};
+float expected_riemman_sum[NUM_SAMPLES - 1u] = {0.0, 0.652569288919265, 1.83941712319097, 3.46369523325247, 5.44611096243047,
+7.72174497421328, 10.2374458113293, 12.9496967411396, 15.8228692763588, 18.8277932787611,
+21.9405862591093, 25.1416948890049, 28.415110257163, 31.7477253755914, 35.1288091501406,
+38.5495757040163, 42.0028317696942, 45.482687997837, 48.9843225970268, 52.5037878183446};
+float expected_trapezoid_sum[NUM_SAMPLES - 1u] = {0.326284644459633, 1.24599320605512, 2.65155617822172, 4.45490309784147, 6.58392796832188,
+8.97959539277132, 11.5935712762345, 14.3862830087492, 17.32533127756, 20.3841897689352,
+23.5411405740571, 26.778402573084, 30.0814178163772, 33.438267262866, 36.8391924270785,
+40.2762037368553, 43.7427598837656, 47.2335052974319, 50.7440552076857, 54.2708196683449};
+float calculated_derivative[NUM_SAMPLES - 1u] = {0};
 
 
 bool compare_same_size_arrays(float* p_expected, uint32_t size_expected, float* p_calculated, uint32_t size_calculated)
@@ -29,6 +37,7 @@ bool compare_same_size_arrays(float* p_expected, uint32_t size_expected, float* 
 	{
 		if( p_expected[idx] != p_calculated[idx] )
 		{
+			printf( "Mismatch at sample [ %d ]\tCalculated [ %.9f ]\tExpected [ %.9f ]\n", idx, p_calculated[idx], p_expected[idx] );
 			matches_expectation = false;
 		}
 	}
@@ -42,6 +51,7 @@ bool test_calculate_derivative( void )
 	math_helpers_derivative(calculated_derivative, NUM_SAMPLES - 1u, sample_output, NUM_SAMPLES);
 	for( uint32_t idx = 0u; idx < NUM_SAMPLES - 1u; idx++ )
 	{
+		expected_derivative[idx] = round_to_three_decimal_places(expected_derivative[idx]);
 		calculated_derivative[idx] = round_to_three_decimal_places(calculated_derivative[idx]);
 	}
 	matches_expectation = compare_same_size_arrays(expected_derivative, NUM_SAMPLES - 1u, calculated_derivative, NUM_SAMPLES - 1u);
@@ -54,7 +64,9 @@ bool test_calculate_riemman_sum( void )
 	bool matches_expectation = false;
 	float calculated_sum = 0.0f;
 	calculated_sum = math_helpers_riemman_sum_approximation(sample_output, NUM_SAMPLES);
-	matches_expectation = (expected_riemman_sum[NUM_SAMPLES - 2u] == calculated_sum) ? true : false;
+	calculated_sum = round_to_three_decimal_places(calculated_sum);
+	printf("%.9f\t%.9f\n", expected_riemman_sum[NUM_SAMPLES - 2u], calculated_sum);
+	matches_expectation = ( expected_riemman_sum[NUM_SAMPLES - 2u] == calculated_sum ) ? true : false;
 	return matches_expectation;
 }
 
@@ -64,7 +76,9 @@ bool test_calculate_trapezoid_sum( void )
 	bool matches_expectation = false;
 	float calculated_sum = 0.0f;
 	calculated_sum = math_helpers_trapezoid_approximation(sample_output, NUM_SAMPLES);
-	matches_expectation = (expected_riemman_sum[NUM_SAMPLES - 2u] == calculated_sum) ? true : false;
+	calculated_sum = round_to_three_decimal_places(calculated_sum);
+	printf("%.9f\t%.9f\n", expected_trapezoid_sum[NUM_SAMPLES - 2u], calculated_sum);
+	matches_expectation = ( expected_trapezoid_sum[NUM_SAMPLES - 2u] == calculated_sum ) ? true : false;
 	return matches_expectation;
 }
 
